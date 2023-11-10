@@ -1,5 +1,5 @@
 import './App.css';
-import React, { Fragment, useState } from 'react';
+import React, { Fragment, useState, useEffect, useCallback } from 'react';
 import MoviesList from './components/MoviesList';
 
 function App() {
@@ -7,7 +7,7 @@ function App() {
   const [isLoading, setIsLoading] = useState(false);
   const [error, serError] = useState(null);
 
-  async function fetchMoviesHandler() {
+  const fetchMoviesHandler = useCallback (async () => {
     setIsLoading(true);
     serError(null);
     try {
@@ -33,7 +33,11 @@ function App() {
       serError(error.message);
     }
     setIsLoading(false);
-  }
+  }, []);
+
+  useEffect(() => {
+    fetchMoviesHandler();
+  }, [fetchMoviesHandler]);
 
   let content = <p>Found no movies.</p>;
 
